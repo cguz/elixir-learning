@@ -5,20 +5,22 @@ defmodule ChatbotServer.Handler do
   end
 
   def parse(request) do
-    conv = %{ method: "GET", path: "/ask", resp_body: "" }
+    [method, path, _] = request |> String.split("\n") |> List.first |> String.split(" ")
+
+    %{ method: method, path: path, resp_body: "" }
   end
 
-  def route(request) do
-    conv = %{ method: "GET", path: "/ask", resp_body: "Response of the chat" }
+  def route(conv) do
+    %{ conv | resp_body: "Response of the chat" }
   end
 
   def format_response(conv) do
     """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 20
+    Content-Length: #{String.length(conv.resp_body)}
 
-    Response of the chat
+    #{conv.resp_body}
     """
   end
 end
