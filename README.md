@@ -70,11 +70,13 @@ Match the value of a variable
 
 ## Map
 
+Keys as Atoms 
+
     conv = %{ method: "GET", path: "/wildthings" }
 
-    conv[:method]
+    conv[:method] // works with all maps
 
-    conv.method
+    conv.method // it works because the keys are Atoms
 
 Add a new variable in the Map
 
