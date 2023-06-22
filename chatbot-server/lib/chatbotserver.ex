@@ -17,4 +17,4 @@ defmodule ChatbotServer do
   end
 end
 
-# IO.puts ChatbotServer.hello("Martin");
+IO.puts ChatbotServer.hello("Martin");

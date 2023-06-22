@@ -83,3 +83,13 @@ Add a new variable in the Map
     conv = Map.put(conv, :resp_body, "Bears")
 
     conv = %{ conv | resp_body: "Bears, Lions, Tigers" }
+
+## Functions
+
+- Private defp
+
+## Rewrite requests  for /bears?id=1 to /bears/1, /bears?id=2 to /bears/2
+
+def rewrite_path(%{path: "/bears?id=" <> id} = conv) do
+  %{ conv | path: "/bears/#{id}" }
+end
