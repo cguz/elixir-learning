@@ -2,6 +2,10 @@
 
 - All data structures are inmutable
 
+## Install Elixir
+
+    $ sudo apt install elixir
+
 ## Create Mix Project
 
     $ mix new chatbotserver
@@ -83,6 +87,18 @@ Add a new variable in the Map
     conv = Map.put(conv, :resp_body, "Bears")
 
     conv = %{ conv | resp_body: "Bears, Lions, Tigers" }
+
+## Structure
+
+It is more or less similar to Map but with some changes
+
+Create the structure:
+
+	$ conv = %ChatbotServer.Conv{ method: "GET" }
+
+Change a value:
+
+	$ conv = %{ conv | status: 200}
 
 ## Functions
 

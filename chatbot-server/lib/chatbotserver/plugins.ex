@@ -1,7 +1,9 @@
 defmodule ChatbotServer.Plugins do
 
+  # create an alias to the struct
   alias ChatbotServer.Conv
 
+  # The following functions only work if the input is an Conv struct
   @doc "Logs 404 requests"
   def track(%Conv{status: 404, path: path} = conv) do
     IO.puts "Warning: #{path} is on the loose!"

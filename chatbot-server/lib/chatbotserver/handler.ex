@@ -1,16 +1,22 @@
+# define a module Handler
 defmodule ChatbotServer.Handler do
 
   @moduledoc """
   Handles HTTP requests.
   """
+
+
   # Constant values
   @pages_path Path.expand("../../pages", __DIR__)
 
+
+  # Create an alias
   alias ChatbotServer.Conv
 
   import ChatbotServer.Plugins, only: [rewrite_path: 1, log: 1, track: 1]
   import ChatbotServer.Parser
   import ChatbotServer.FileHandler, only: [handle_file: 2]
+
 
   @doc "Transforms the request into a response."
   def handle(request) do
@@ -25,37 +31,24 @@ defmodule ChatbotServer.Handler do
   end
 
   # Define the endpoints
-  #def route(conv) do
-  #  route(conv, conv.method, conv.path)
-  #end
-
-  def route(%Conv{ method: "GET", path: "/ask"} = conv) do
-    %{ conv | status: 200, resp_body: "Response of the chat" }
+  def route(%Conv{ method: "GET", path: "/chatbot/ask"} = conv) do
+    call_html_file("form.html")
+    |> handle_file(conv)
   end
 
-  def route(%Conv{ method: "GET", path: "/fetch"} = conv) do
-    %{ conv | status: 200, resp_body: "Response of fetching new data" }
+  def route(%Conv{ method: "GET", path: "/chatbot/model/select" <> model} = conv) do
+    %{ conv | status: 200, resp_body: "Response of training the model #{model}" }
   end
 
-  def route(%Conv{ method: "GET", path: "/fetch/" <> id} = conv) do
-    %{ conv | status: 200, resp_body: "Response of fetching new data #{id}" }
+  # name=FlanT5&arguments="All arguments"
+  def route(%Conv{ method: "POST", path: "/chatbot/train"} = conv) do
+    %{ conv | status: 201, resp_body: "Response for train the model #{conv.params["name"]} !" }
   end
 
   def route(%Conv{ method: "DELETE", path: "/fetch/" <> id} = conv) do
     %{ conv | status: 200, resp_body: "Deleting data #{id}" }
   end
 
-  def route(%Conv{ method: "GET", path: "/train"} = conv) do
-    %{ conv | status: 200, resp_body: "Response of training the model" }
-  end
-
-
-
-
-  def route(%Conv{ method: "GET", path: "/chat/ask"} = conv) do
-    call_html_file("form.html")
-    |> handle_file(conv)
-  end
 
   # solution with pattern matching and functions
   def route(%Conv{ method: "GET", path: "/about"} = conv) do
@@ -69,6 +62,7 @@ defmodule ChatbotServer.Handler do
     |> Path.join(file)
     |> File.read
   end
+  
 
 
   def route(%Conv{ path: path } = conv) do
@@ -88,19 +82,25 @@ defmodule ChatbotServer.Handler do
   end
 end
 
+
+
+######################################
+#######  TEST FUNCTIONS ##############
+######################################
+
+# testing endpoint /chatbot/ask
 request = """
-GET /chat/ask HTTP/1.1
+GET /chatbot/ask HTTP/1.1
 Host: example.com
 User-Agent: ExambleBrowser/1.0
 Accept: */*
 
 """
-
 response = ChatbotServer.Handler.handle(request)
-
 IO.puts response
 
 
+# testing endpoint /about
 request = """
 GET /about HTTP/1.1
 Host: example.com
@@ -108,7 +108,20 @@ User-Agent: ExambleBrowser/1.0
 Accept: */*
 
 """
-
 response = ChatbotServer.Handler.handle(request)
+IO.puts response
 
+
+# testing endpoint POST
+request = """
+POST /chatbot/train HTTP/1.1
+Host: example.com
+User-Agent: ExambleBrowser/1.0
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+name=FlanT5&arguments="All arguments"
+"""
+response = ChatbotServer.Handler.handle(request)
 IO.puts response

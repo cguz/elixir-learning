@@ -4,6 +4,10 @@
 
 ## Installation
 
+Install elixir
+
+  $ sudo apt install elixir
+
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `chatbot` to your list of dependencies in `mix.exs`:
 

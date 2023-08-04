@@ -1,12 +1,14 @@
 defmodule ChatbotServer.Conv do
 
-  defstruct method: "", path: "", resp_body: "", status: nil
+  # The name of the struct is the same as the module ChatbotServer.Conv
+  defstruct method: "", path: "", params: "", resp_body: "", status: nil
 
+  # function to return the full status
   def full_status(conv) do
     "#{conv.status} #{status_reason(conv.status)}"
   end
 
-  ## private function
+  ## private function of the status reason
   defp status_reason(code) do
     %{
       200 => "OK",
